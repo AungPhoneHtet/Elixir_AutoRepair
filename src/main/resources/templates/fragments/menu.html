@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="menu" class="col-md-3 left_col menu_fixed">
+    <div class="left_col scroll-view">
+        <div class="navbar nav_title" style="border: 0;">
+            <a th:text="#{system.name}" th:href="@{/home}" class="site_title"> <span><i
+                    class="fa fa-automobile"></i></span></a>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <!-- menu profile quick info -->
+        <div class="profile clearfix">
+            <div class="profile_pic">
+                <a th:href="@{/home}"><img src="images/logo.png" alt="..."
+                                           class="img-circle profile_img"></img></a>
+            </div>
+            <div class="profile_info">
+                <span>Welcome,</span>
+                <h2 th:text="${session.userName}"></h2>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <!-- /menu profile quick info -->
+
+        <br/>
+
+        <!-- sidebar menu -->
+        <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+            <div class="menu_section">
+                <h3 th:text="#{menu.title.general}"></h3>
+                <ul class="nav side-menu">
+                    <li><a><i class="fa fa-edit"></i><span th:text="#{menu.level.one.voucher}"></span><span
+                            class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li><a th:text="#{menu.level.two.new.voucher}" th:href="@{/newVoucher}"></a></li>
+                            <li><a th:text="#{menu.level.two.existing.vouchers}" th:href="@{/existingVouchers}"></a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div th:if="${session.userAccount.role == 'admin'}">
+                <div class="menu_section">
+                    <h3 th:text="#{menu.title.user.administration}"></h3>
+                    <ul class="nav side-menu">
+                        <li><a><i class="fa fa-group"></i><span th:text="#{menu.level.one.user}"></span><span
+                                class="fa fa-chevron-down"></span></a>
+                            <ul class="nav child_menu">
+                                <li><a th:text="#{menu.level.two.new.user}" th:href="@{/newUserAccount}"></a></li>
+                                <li><a th:text="#{menu.level.two.existing.users}" th:href="@{/existingUsers}"></a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- /sidebar menu -->
+
+        <!-- /menu footer -->
+        <div class="sidebar-footer hidden-small"></div>
+    </div>
+</div>
+</body>
+</html>

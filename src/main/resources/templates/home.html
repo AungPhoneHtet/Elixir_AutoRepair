@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>MCB CCT System |</title>
+
+    <!-- Bootstrap -->
+    <link href="webjars/bootstrap/3.3.7/css/bootstrap.min.css"
+          rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="webjars/font-awesome/4.6.1/css/font-awesome.min.css"
+          rel="stylesheet">
+    <!-- NProgress -->
+    <link href="webjars/nprogress/0.2.0/nprogress.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="webjars/iCheck/1.0.2/skins/flat/green.css" rel="stylesheet">
+    <!-- Custom Theme Style -->
+    <link href="css/custom.min.css" rel="stylesheet">
+    <!-- Datatables -->
+    <link href="datatables.net-bs/css/dataTables.bootstrap.min.css"
+          rel="stylesheet">
+    <link href="datatables.net-buttons-bs/css/buttons.bootstrap.min.css"
+          rel="stylesheet">
+    <link
+            href="datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css"
+            rel="stylesheet">
+    <link
+            href="datatables.net-responsive-bs/css/responsive.bootstrap.min.css"
+            rel="stylesheet">
+    <link href="datatables.net-scroller-bs/css/scroller.bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- PNotify -->
+    <link href="pnotify/dist/pnotify.css" rel="stylesheet">
+    <link href="pnotify/dist/pnotify.buttons.css" rel="stylesheet">
+    <link href="pnotify/dist/pnotify.nonblock.css" rel="stylesheet">
+
+    <!-- bootstrap-daterangepicker -->
+    <link href="bootstrap-daterangepicker/daterangepicker.css"
+          rel="stylesheet">
+    <!-- bootstrap-datetimepicker -->
+    <link
+            href="bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css"
+            rel="stylesheet">
+    <!-- jQuery custom content scroller -->
+    <link href="malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css" rel="stylesheet"/>
+</head>
+
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+
+
+        <div th:replace="fragments/menu :: menu"></div>
+
+        <!-- top navigation -->
+        <div th:replace="fragments/header :: header"></div>
+        <!-- /top navigation -->
+
+        <!-- page content -->
+        <div th:replace="@{'contents/' + ${template}} :: content"></div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <div th:replace="fragments/footer :: footer"></div>
+        <!-- /footer content -->
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="webjars/jquery/2.2.3/jquery.min.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<!-- Bootstrap -->
+<script src="webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- FastClick -->
+<script src="webjars/fastclick/1.0.6/fastclick.js"></script>
+<!-- NProgress -->
+<script src="webjars/nprogress/0.2.0/nprogress.js"></script>
+<!-- iCheck -->
+<script src="webjars/iCheck/1.0.2/icheck.min.js"></script>
+<!-- bootstrap-daterangepicker -->
+<script src="moment/min/moment.min.js"></script>
+<script src="bootstrap-daterangepicker/daterangepicker.js"></script>
+
+<!-- bootstrap-datetimepicker -->
+<script
+        src="bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+
+<!-- Custom Scripts -->
+<script src="js/custom.min.js"></script>
+<script src="js/report.js"></script>
+<!-- Datatables -->
+<script src="datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+<script src="datatables.net-buttons/js/buttons.flash.min.js"></script>
+<script src="datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="datatables.net-buttons/js/buttons.print.min.js"></script>
+<script
+        src="datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+<script src="datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+<script src="datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script src="datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+<!-- PNotify -->
+<script src="pnotify/dist/pnotify.js"></script>
+<script src="pnotify/dist/pnotify.buttons.js"></script>
+<script src="pnotify/dist/pnotify.nonblock.js"></script>
+<!-- Chart.js -->
+<script src="Chart.js/dist/Chart.min.js"></script>
+<!-- jQuery custom content scroller -->
+<script src="malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
+<th:block th:include="@{'contents/' + ${template}} :: script"></th:block>
+<script type="text/javascript" th:inline="javascript">
+
+    $(function () {
+        var successMessage = [[${successMessage}]];
+        var errorMessage = [[${errorMessage}]];
+
+        if (successMessage != null) {
+            new PNotify({
+                title: 'Success',
+                text: successMessage,
+                type: 'success',
+                styling: 'bootstrap3'
+            });
+        }
+
+        if (errorMessage != null) {
+            new PNotify({
+                title: 'Fail',
+                text: errorMessage,
+                type: 'error',
+                styling: 'bootstrap3'
+            });
+        }
+
+        $('.table table-striped table-bordered jambo_table').DataTable({
+            "scrollY": 200,
+            "scrollX": true
+        })
+
+    })
+</script>
+</body>
+</html>

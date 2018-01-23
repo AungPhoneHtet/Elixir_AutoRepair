@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>MCB CCT System | </title>
+
+    <!-- Bootstrap -->
+    <link href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="webjars/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Animate.css -->
+    <link href="webjars/animate.css/3.5.2/animate.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="css/custom.min.css" rel="stylesheet">
+</head>
+
+<body class="login">
+<div>
+    <a class="hiddenanchor" id="signup"></a>
+    <a class="hiddenanchor" id="signin"></a>
+
+    <div class="login_wrapper">
+        <div class="animate form login_form">
+            <section class="login_content">
+                <form action="#" th:action="@{/login}" method="post">
+                    <h1 th:text="#{system.name}"></h1>
+                    <div th:if="${loginError}" class="error">
+                        <div class="red">
+                            <p th:text="#{login.error}">
+                            <p/>
+                        </div>
+                    </div>
+                    <div>
+                        <input type="text" class="form-control" placeholder="Username" id="username" name="username"/>
+                    </div>
+                    <div>
+                        <input type="password" class="form-control" placeholder="Password" id="password"
+                               name="password"/>
+                    </div>
+                    <div>
+                        <input type="submit" value="Log in" class="btn btn-default"/>
+                    </div>
+                    <div class="clearfix"></div>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>
+</body>
+</html>
