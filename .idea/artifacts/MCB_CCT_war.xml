@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="MCB_CCT:war">
-    <output-path>$PROJECT_DIR$/target</output-path>
-    <root id="archive" name="MCB_CCT.war">
-      <element id="artifact" artifact-name="MCB_CCT:war exploded" />
-    </root>
-  </artifact>
-</component>

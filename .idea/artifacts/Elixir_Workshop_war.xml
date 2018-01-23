@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="Elixir_Workshop:war">
-    <output-path>$PROJECT_DIR$/target</output-path>
-    <root id="archive" name="Elixir_Workshop.war">
-      <element id="artifact" artifact-name="Elixir_Workshop:war exploded" />
-    </root>
-  </artifact>
-</component>
