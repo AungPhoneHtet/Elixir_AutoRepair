@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>MCB CCT System |</title>
+    <title>Auto Repair System |</title>
 
     <!-- Bootstrap -->
     <link href="webjars/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -119,11 +119,11 @@
 <th:block th:include="@{'contents/' + ${template}} :: script"></th:block>
 <script type="text/javascript" th:inline="javascript">
 
-    $(function () {
+    $(function(){
         var successMessage = [[${successMessage}]];
         var errorMessage = [[${errorMessage}]];
 
-        if (successMessage != null) {
+        if(successMessage != null) {
             new PNotify({
                 title: 'Success',
                 text: successMessage,
@@ -132,7 +132,7 @@
             });
         }
 
-        if (errorMessage != null) {
+        if(errorMessage != null) {
             new PNotify({
                 title: 'Fail',
                 text: errorMessage,

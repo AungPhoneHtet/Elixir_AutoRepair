@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="right_col" role="main" th:fragment="content">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_title">
+                <h4>New User</h4>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_panel">
+                <div class="x_content">
+                    <div class="col-md-3 form-group has-feedback">
+                        <input id="voucherNo" class="form-control has-feedback-left" placeholder="Voucher No." readonly>
+                        <span class="fa fa-edit form-control-feedback left" aria-hidden="true"></span>
+                    </div>
+                    <div class="col-md-3 form-group has-feedback">
+                        <input id="customerName" class="form-control has-feedback-left" placeholder="Customer Name" required>
+                        <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                    </div>
+                    <div class="col-md-3 form-group has-feedback">
+                        <input id="carNo" class="form-control has-feedback-left" placeholder="Car Number" required>
+                        <span class="fa fa-car form-control-feedback left" aria-hidden="true"></span>
+                    </div>
+
+                    <div class="col-md-3 xdisplay_inputx form-group has-feedback">
+                        <input id="date" class="form-control has-feedback-left" id="single_cal2"
+                               aria-describedby="inputSuccess2Status2" readonly>
+                        <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+                        <span id="inputSuccess2Status2" class="sr-only">(success)</span>
+                    </div>
+                    <div class="x_title"><h5>Item(s)</h5></div>
+                    <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                        <input class="form-control" id="item" placeholder="Item">
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                        <input class="form-control" id="price" placeholder="Price">
+                    </div>
+                    <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                        <input class="col-md-3 form-control" id="Qty" placeholder="Qty">
+                    </div>
+                    <button id="btnAdd" class="btn btn-primary"><i class="fa fa-plus"></i> Add</button>
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <button id="btnSave" class="btn btn-success"><i class="fa fa-save"></i> Save</button>
+                        <button id="btnView" onclick="window.print();" class="btn btn-success"><i class="fa fa-eye"></i>
+                            View
+                        </button>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <table id="item_table" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Item(s)</th>
+                                    <th>Price</th>
+                                    <th>Qty</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<th:block th:fragment="script">
+    <script type="text/javascript" th:inline="javascript">
+        $("#btnAdd").on("click", function () {
+            var item = $("#item").val();
+            var price = $("#price").val();
+            var qty = $("#Qty").val();
+            var markup = "<tr>" +
+                "<td><button class='btn btn-xs btn-danger' onclick='remove(this);'><i class='fa fa-remove'></i></td>" +
+                "<td><p contenteditable='true'>" + item + "</td>" +
+                "<td><p contenteditable='true'>" + price + "</td>" +
+                "<td><p contenteditable='true'>" + qty + "</td>" +
+                "<td><p contenteditable='true'>" + price * qty + "</td></tr>";
+            $("table tbody").append(markup);
+            clear_data();
+        });
+
+        function remove(src) {
+            var row = src.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+
+        function clear_data() {
+            $("#item").val('');
+            $("#price").val('');
+            $("#Qty").val('');
+        }
+
+        $("#btnSave").on("click", function(){
+            var customerName = $("#customerName").val();
+            var carNo = $("#carNo").val();
+            var date = $("#date").val();
+            var items = get_items().splice(1);
+            var voucher = {customerName, carNo, date, items};
+            $.post({
+                url : "saveVoucher",
+                contentType : "application/json",
+                data : JSON.stringify(voucher),
+                success : function (response) {
+                    notify(response);
+                    $("#voucherNo").val(response.data[0]);
+                }
+            });
+        });
+
+        function get_items() {
+            var table = $("#item_table");
+            var items = [];
+            table.find('tr').each(function (i, el) {
+                var $tds = $(this).find('td'),
+                    item = $tds.eq(1).text(),
+                    price = $tds.eq(2).text(),
+                    qty = $tds.eq(3).text(),
+                    amount = $tds.eq(4).text();
+                items.push({item,price,qty,amount});
+            });
+            return items;
+        }
+
+        function notify(response) {
+            new PNotify({
+                title: response.messageTitle,
+                text: response.messageDesc,
+                type: response.messageType,
+                styling: 'bootstrap3'
+            });
+        }
+    </script>
+</th:block>
+</html>

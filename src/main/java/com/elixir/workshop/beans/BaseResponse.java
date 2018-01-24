@@ -3,11 +3,18 @@
  */
 package com.elixir.workshop.beans;
 
+import lombok.Builder;
+import lombok.Data;
+
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author aphtet
  */
+
+@Data
+@Builder
 public class BaseResponse implements Serializable {
 
     /**
@@ -22,43 +29,6 @@ public class BaseResponse implements Serializable {
     private String messageTitle;
     private String messageType;
     private String messageDesc;
-
-
-    public BaseResponse(String messageTitle, String messageType, String messageDesc) {
-        super();
-        this.messageTitle = messageTitle;
-        this.messageType = messageType;
-        this.messageDesc = messageDesc;
-    }
-
-
-    public String getMessageTitle() {
-        return messageTitle;
-    }
-
-
-    public void setMessageTitle(String messageTitle) {
-        this.messageTitle = messageTitle;
-    }
-
-
-    public String getMessageType() {
-        return messageType;
-    }
-
-
-    public void setMessageType(String messageType) {
-        this.messageType = messageType;
-    }
-
-
-    public String getMessageDesc() {
-        return messageDesc;
-    }
-
-
-    public void setMessageDesc(String messageDesc) {
-        this.messageDesc = messageDesc;
-    }
+    private String[] data;
 
 }

@@ -31,7 +31,7 @@ public class LoginController extends MainController {
     public String home(Model model, HttpServletRequest request) {
         logger.debug("Home page get method ...");
         if (request.getSession().getAttribute("userName") != null) {
-            return super.replaceContentPage(model, request, Constants.ContentPages.BLANK_PAGE);
+            return super.replaceContentPage(model, request, Constants.ContentPages.NEW_VOUCHER);
         } else {
             return super.redirectPage(model, request, Constants.URL.LOGIN);
         }

@@ -14,7 +14,7 @@ public interface Constants {
     }
 
     interface ContentPages {
-        String BLANK_PAGE = "blank_page";
+        String NEW_VOUCHER = "new_voucher";
         String NEW_USER = "new_user";
         String EDIT_USER = "edit_user";
         String EXISTING_USERS = "existing_users";
