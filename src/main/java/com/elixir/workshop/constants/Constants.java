@@ -8,6 +8,8 @@ import java.util.Date;
  */
 public interface Constants {
 
+    public static final SimpleDateFormat UI_DATE = new SimpleDateFormat("dd/MM/yyyy");
+
     interface MessageType {
         String SUCCESS = "successMessage";
         String ERROR = "errorMessage";
@@ -15,6 +17,8 @@ public interface Constants {
 
     interface ContentPages {
         String NEW_VOUCHER = "new_voucher";
+        String EXISTING_VOUCHERS = "existing_vouchers";
+
         String NEW_USER = "new_user";
         String EDIT_USER = "edit_user";
         String EXISTING_USERS = "existing_users";
@@ -31,5 +35,10 @@ public interface Constants {
     interface Role {
         String ADMIN = "admin";
         String USER = "user";
+    }
+
+    interface Status {
+        String SAVE = "save";
+        String PAID = "paid";
     }
 }

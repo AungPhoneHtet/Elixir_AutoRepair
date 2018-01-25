@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 @Data
 public class Item {
 
+    private String voucherNo;
     private String item;
     private double price;
     private long qty;

@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_title">
-                <h4>New User</h4>
+                <h4>Voucher</h4>
                 <div class="clearfix"></div>
             </div>
             <div class="x_panel">
@@ -24,33 +24,38 @@
                     </div>
 
                     <div class="col-md-3 xdisplay_inputx form-group has-feedback">
-                        <input id="date" class="form-control has-feedback-left" id="single_cal2"
-                               aria-describedby="inputSuccess2Status2" readonly>
+                        <input class="form-control has-feedback-left single_cal2" id="date" readonly>
                         <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                         <span id="inputSuccess2Status2" class="sr-only">(success)</span>
                     </div>
-                    <div class="x_title"><h5>Item(s)</h5></div>
-                    <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                        <input class="form-control" id="item" placeholder="Item">
+                    <div class="no-print">
+                        <div class="x_title"><h5>Item(s)</h5></div>
+                        <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                            <input class="form-control" id="item" placeholder="Item">
+                        </div>
+                        <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                            <input class="form-control" id="price" placeholder="Price">
+                        </div>
+                        <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                            <input class="col-md-3 form-control" id="Qty" placeholder="Qty">
+                        </div>
+                        <button id="btnAdd" class="btn btn-primary"><i class="fa fa-plus"></i> Add</button>
                     </div>
-                    <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                        <input class="form-control" id="price" placeholder="Price">
-                    </div>
-                    <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                        <input class="col-md-3 form-control" id="Qty" placeholder="Qty">
-                    </div>
-                    <button id="btnAdd" class="btn btn-primary"><i class="fa fa-plus"></i> Add</button>
-                    <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-md-12 col-sm-12 col-xs-12 no-print">
+                        <a th:href="@{/newVoucher}" id="btnNew" class="btn btn-primary"><i class="fa fa-file-o"></i> New</a>
                         <button id="btnSave" class="btn btn-success"><i class="fa fa-save"></i> Save</button>
-                        <button id="btnView" onclick="window.print();" class="btn btn-success"><i class="fa fa-eye"></i>
-                            View
+                        <button id="btnPaid" class="btn btn-success"><i class="fa fa-money"></i> Paid</button>
+                        <button id="btnPrint" onclick="print_voucher();" class="btn btn-primary"><i
+                                class="fa fa-print"></i>
+                            Print
                         </button>
                     </div>
+                    <div class="clear_fix"></div>
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <table id="item_table" class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th></th>
+                                    <th class="no-print"></th>
                                     <th>Item(s)</th>
                                     <th>Price</th>
                                     <th>Qty</th>
@@ -58,6 +63,12 @@
                                 </tr>
                             </thead>
                             <tbody></tbody>
+                            <tfoot>
+                            <tr>
+                                <th colspan="4">Grand Total</th>
+                                <th id="total_amount">0</th>
+                            </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -68,23 +79,78 @@
 </body>
 <th:block th:fragment="script">
     <script type="text/javascript" th:inline="javascript">
+        $(function () {
+            init_page();
+            init_buttons();
+        })
+
+        function init_buttons() {
+            var voucher = [[${voucher}]];
+            if (voucher.status === null) {
+                disable_paid_button();
+                disable_print_button();
+            }
+            if (voucher.status === "paid") {
+                disable_save_button();
+            }
+        }
+
+        function disable_save_button() {
+            $("#btnSave").attr("disabled", "disabled");
+        }
+
+        function disable_paid_button() {
+            $("#btnPaid").attr("disabled", "disabled");
+        }
+
+        function enable_paid_button() {
+            $("#btnPaid").removeAttr("disabled");
+        }
+
+        function disable_print_button() {
+            $("#btnPrint").attr("disabled", "disabled");
+        }
+
+        function enable_Print_button() {
+            $("#btnPrint").removeAttr("disabled");
+        }
+
+        function init_page() {
+            var voucher = [[${voucher}]];
+            $("#voucherNo").val(voucher.voucherNo);
+            $("#customerName").val(voucher.customerName);
+            $("#carNo").val(voucher.carNo);
+            $("#date").val(voucher.date);
+            for (var i in voucher.items) {
+                var item = voucher.items[i];
+                add_items(item.item, item.price, item.qty, item.amount);
+            }
+            change_grand_total();
+        }
+
         $("#btnAdd").on("click", function () {
             var item = $("#item").val();
             var price = $("#price").val();
             var qty = $("#Qty").val();
-            var markup = "<tr>" +
-                "<td><button class='btn btn-xs btn-danger' onclick='remove(this);'><i class='fa fa-remove'></i></td>" +
-                "<td><p contenteditable='true'>" + item + "</td>" +
-                "<td><p contenteditable='true'>" + price + "</td>" +
-                "<td><p contenteditable='true'>" + qty + "</td>" +
-                "<td><p contenteditable='true'>" + price * qty + "</td></tr>";
-            $("table tbody").append(markup);
+            var amount = price * qty;
+            add_items(item, price, qty, amount);
+            change_grand_total();
             clear_data();
         });
 
+        function add_items(item, price, qty, amount) {
+            var markup = "<tr>" +
+                "<td class='no-print'><button class='btn btn-xs btn-danger' onclick='remove(this);'><i class='fa fa-remove'></i></td>" +
+                "<td><p contenteditable='true'>" + item + "</td>" +
+                "<td><p contenteditable='true'>" + price + "</td>" +
+                "<td><p contenteditable='true'>" + qty + "</td>" +
+                "<td><p contenteditable='true'>" + amount + "</td></tr>";
+            $("table tbody").append(markup);
+        }
         function remove(src) {
             var row = src.parentNode.parentNode;
             row.parentNode.removeChild(row);
+            change_grand_total();
         }
 
         function clear_data() {
@@ -94,11 +160,13 @@
         }
 
         $("#btnSave").on("click", function(){
+            var voucherNo = $("#voucherNo").val();
             var customerName = $("#customerName").val();
             var carNo = $("#carNo").val();
             var date = $("#date").val();
-            var items = get_items().splice(1);
-            var voucher = {customerName, carNo, date, items};
+            var items = get_items();
+            var voucher = {voucherNo, customerName, carNo, date, items};
+            console.log(JSON.stringify(voucher));
             $.post({
                 url : "saveVoucher",
                 contentType : "application/json",
@@ -106,6 +174,20 @@
                 success : function (response) {
                     notify(response);
                     $("#voucherNo").val(response.data[0]);
+                    enable_paid_button();
+                    enable_Print_button();
+                }
+            });
+        });
+
+        $("#btnPaid").on("click", function () {
+            $.post({
+                url: "paidVoucher",
+                contentType: "application/json",
+                data: $("#voucherNo").val(),
+                success: function (response) {
+                    notify(response);
+                    disable_save_button();
                 }
             });
         });
@@ -113,7 +195,7 @@
         function get_items() {
             var table = $("#item_table");
             var items = [];
-            table.find('tr').each(function (i, el) {
+            table.find('tbody>tr').each(function (i, el) {
                 var $tds = $(this).find('td'),
                     item = $tds.eq(1).text(),
                     price = $tds.eq(2).text(),
@@ -124,6 +206,15 @@
             return items;
         }
 
+        function change_grand_total() {
+            var items = get_items();
+            var total_amount = 0;
+            for (var i in items) {
+                var item = items[i];
+                total_amount += parseInt(item.amount);
+            }
+            $('tfoot th#total_amount').text(total_amount);
+        }
         function notify(response) {
             new PNotify({
                 title: response.messageTitle,
@@ -131,6 +222,12 @@
                 type: response.messageType,
                 styling: 'bootstrap3'
             });
+        }
+
+        function print_voucher() {
+            $(".no-print").hide();
+            window.print();
+            $(".no-print").show();
         }
     </script>
 </th:block>
