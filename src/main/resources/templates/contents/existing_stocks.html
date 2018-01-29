@@ -5,7 +5,7 @@
     <div class="row"></div>
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_title">
-            <h4>Existing Users</h4>
+            <h4>Existing Stocks</h4>
             <div class="clearfix"></div>
         </div>
         <div class="x_panel">
@@ -14,24 +14,26 @@
                        class="table table-striped table-bordered">
                     <thead>
                     <tr>
-                        <th width="20%">User Id</th>
-                        <th width="25%">User Name</th>
-                        <th width="20%">Role</th>
-                        <th width="15%">Actions</th>
+                        <th>Stock Code</th>
+                        <th>Stock Description</th>
+                        <th>Brand</th>
+                        <th>Buy Price</th>
+                        <th>Sell Price</th>
+                        <th>Quantity</th>
+                        <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="userAccount : ${userAccounts}">
-                        <td th:text="${userAccount.userId}"></td>
-                        <td th:text="${userAccount.userName}"></td>
-                        <td th:text="${userAccount.role}"></td>
+                    <tr th:each="stock : ${stocks}">
+                        <td th:text="${stock.code}"></td>
+                        <td th:text="${stock.description}"></td>
+                        <td th:text="${stock.brand}"></td>
+                        <td th:text="${stock.buyPrice}"></td>
+                        <td th:text="${stock.sellPrice}"></td>
+                        <td th:text="${stock.qty}"></td>
                         <td><a
-                                th:href="@{/editUserAccount(userId=${userAccount.userId})}"
+                                th:href="@{/getStock(stockCode=${stock.code})}"
                                 class="btn btn-xs btn-info"><i class="fa fa-edit"></i> Edit</a>
-                            <a
-                                    th:href="@{/deleteUserAccount(userId=${userAccount.userId})}"
-                                    class="btn btn-xs btn-danger confirmation"><i class="fa fa-trash"></i>
-                                Delete</a>
                     </tr>
                     </tbody>
                 </table>

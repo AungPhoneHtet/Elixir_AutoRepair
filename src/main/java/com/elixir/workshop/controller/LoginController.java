@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import com.elixir.workshop.constants.Constants;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class LoginController extends MainController {
 
-    final static Logger logger = Logger.getLogger(LoginController.class);
+    private final static Logger logger = Logger.getLogger(LoginController.class);
+
+    private VoucherController voucherController;
+
+    @Autowired
+    public LoginController(VoucherController voucherController) {
+        this.voucherController = voucherController;
+    }
 
     @RequestMapping(value = {"/", "/login"})
     public String login() {
@@ -31,7 +39,7 @@ public class LoginController extends MainController {
     public String home(Model model, HttpServletRequest request) {
         logger.debug("Home page get method ...");
         if (request.getSession().getAttribute("userName") != null) {
-            return super.replaceContentPage(model, request, Constants.ContentPages.NEW_VOUCHER);
+            return voucherController.getNewVoucherForm(model, request);
         } else {
             return super.redirectPage(model, request, Constants.URL.LOGIN);
         }

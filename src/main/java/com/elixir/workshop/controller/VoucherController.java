@@ -69,11 +69,11 @@ public class VoucherController extends MainController {
                 voucherService.update(voucher);
             }
         } catch (CoreException e) {
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.ok().body(
                     BaseResponse.builder()
                             .messageType(BaseResponse.MESSAGE_TYPE_ERROR)
                             .messageTitle(BaseResponse.MESSAGE_TITLE_FAIL)
-                            .messageDesc(messages.get("save.fail"))
+                            .messageDesc(e.getMessage())
                             .build());
         }
         return ResponseEntity.ok().body(

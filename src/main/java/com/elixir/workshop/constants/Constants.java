@@ -19,6 +19,9 @@ public interface Constants {
         String NEW_VOUCHER = "new_voucher";
         String EXISTING_VOUCHERS = "existing_vouchers";
 
+        String STOCK = "stock";
+        String EXISTING_STOCKS = "existing_stocks";
+
         String NEW_USER = "new_user";
         String EDIT_USER = "edit_user";
         String EXISTING_USERS = "existing_users";

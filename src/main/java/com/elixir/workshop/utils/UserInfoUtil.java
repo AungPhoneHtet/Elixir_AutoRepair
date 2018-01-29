@@ -28,8 +28,7 @@ public class UserInfoUtil {
 
     public static UserAccount getCurrentUser() {
         if (SecurityContextHolder.getContext().getAuthentication() != null) {
-            UserAccount userAccountRDTO = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            return userAccountRDTO;
+            return (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         } else
             return null;
     }
