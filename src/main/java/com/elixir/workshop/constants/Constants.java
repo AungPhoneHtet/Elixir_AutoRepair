@@ -30,7 +30,7 @@ public interface Constants {
     interface URL {
         String HOME = "/home";
         String LOGIN = "/login";
-        String LOGIN_ERROR = "/login_error";
+        String LOGIN_ERROR = "/login-error";
         String LOGOUT = "/logout";
         String ERROR = "/error";
     }

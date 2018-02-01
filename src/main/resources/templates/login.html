@@ -1,56 +1,73 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <!-- Meta, title, CSS, favicons, etc. -->
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Elixir AutoRepair</title>
 
-    <title>Auto Repair System | </title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+    <link rel="stylesheet" href="webjars/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="webjars/font-awesome/4.6.1/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/form-elements.css">
+    <link rel="stylesheet" href="css/style.css">
 
-    <!-- Bootstrap -->
-    <link href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link href="webjars/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet">
-    <!-- Animate.css -->
-    <link href="webjars/animate.css/3.5.2/animate.css" rel="stylesheet">
-
-    <!-- Custom Theme Style -->
-    <link href="css/custom.min.css" rel="stylesheet">
 </head>
 
-<body class="login">
-<div>
-    <a class="hiddenanchor" id="signup"></a>
-    <a class="hiddenanchor" id="signin"></a>
+<body>
 
-    <div class="login_wrapper">
-        <div class="animate form login_form">
-            <section class="login_content">
-                <form action="#" th:action="@{/login}" method="post">
-                    <h1 th:text="#{system.name}"></h1>
-                    <div th:if="${loginError}" class="error">
-                        <div class="red">
-                            <p th:text="#{login.error}">
-                            <p/>
+<!-- Top content -->
+<div class="top-content">
+
+    <div class="inner-bg">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-sm-4 col-sm-offset-4 form-box">
+                    <div class="form-top">
+                        <div class="form-top-left">
+                            <h3>Login to our site</h3>
+                            <p>Enter username and password to log on:</p>
+                        </div>
+                        <div class="form-top-right">
+                            <i class="fa fa-lock"></i>
                         </div>
                     </div>
-                    <div>
-                        <input type="text" class="form-control" placeholder="Username" id="username" name="username"/>
+                    <div class="form-bottom">
+                        <form role="form" action="" method="post" class="login-form" th:action="@{/login}">
+                            <div>
+                                <label style="color: #DE1B28">Invalid Username and Password! </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="username">Username</label>
+                                <input type="text" name="username" placeholder="Username..."
+                                       class="form-username form-control" id="username">
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="password">Password</label>
+                                <input type="password" name="password" placeholder="Password..."
+                                       class="form-password form-control" id="password">
+                            </div>
+                            <button type="submit" class="btn">Log in!</button>
+                        </form>
                     </div>
-                    <div>
-                        <input type="password" class="form-control" placeholder="Password" id="password"
-                               name="password"/>
-                    </div>
-                    <div>
-                        <input type="submit" value="Log in" class="btn btn-default"/>
-                    </div>
-                    <div class="clearfix"></div>
-                </form>
-            </section>
+                </div>
+            </div>
+
         </div>
     </div>
+
 </div>
+
+
+<!-- Javascript -->
+<script src="webjars/jquery/2.2.3/jquery.min.js"></script>
+<script src="webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="js/jquery.backstretch.min.js"></script>
+<script src="js/scripts.js"></script>
 </body>
+
 </html>
