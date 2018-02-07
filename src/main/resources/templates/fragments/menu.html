@@ -39,12 +39,6 @@
                             </li>
                         </ul>
                     </li>
-                </ul>
-            </div>
-
-            <div class="menu_section">
-                <h3 th:text="#{menu.title.inventory}"></h3>
-                <ul class="nav side-menu">
                     <li><a><i class="fa fa-edit"></i><span th:text="#{menu.level.one.stock}"></span><span
                             class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
@@ -52,6 +46,10 @@
                             <li><a th:text="#{menu.level.two.existing.stocks}" th:href="@{/existingStocks}"></a>
                             </li>
                         </ul>
+                    </li>
+                    <li><a th:href="@{/expense}"><i class="fa fa-edit"></i><span
+                            th:text="#{menu.level.one.expense}"></span></a>
+
                     </li>
                 </ul>
             </div>

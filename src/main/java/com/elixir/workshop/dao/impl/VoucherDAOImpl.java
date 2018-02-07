@@ -114,6 +114,7 @@ public class VoucherDAOImpl implements VoucherDAO {
             v.setDate(DateUtils.changeSQLDateToUIDate(rs.getDate("date")));
             v.setStatus(rs.getString("status"));
 
+            v.setId(rs.getLong("id"));
             v.setCreatedBy(rs.getString("created_by"));
             v.setCreatedDate(rs.getDate("created_date"));
             v.setUpdatedBy(rs.getString("updated_by"));

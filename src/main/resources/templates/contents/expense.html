@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="right_col" role="main" th:fragment="content">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_title">
+                <h4>Expense</h4>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_panel">
+                <div class="x_content">
+                    <div class="col-md-12 form-group has-feedback">
+                        <label>Expense Date : </label>
+                    </div>
+
+                    <div class="col-md-3 form-group has-feedback">
+                        <input class="form-control has-feedback-left single_cal2" id="date" readonly>
+                        <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+                        <span id="inputSuccess2Status2" class="sr-only">(success)</span>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12 no-print">
+                        <div class="x_title"><h5>Expense(s)</h5></div>
+                        <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                            <input class="form-control" id="desc" placeholder="Description">
+                        </div>
+                        <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                            <input class="col-md-3 form-control" id="relatedVoucherNo" placeholder="Voucher No.">
+                        </div>
+                        <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                            <input class="form-control" id="amount" placeholder="Amount">
+                        </div>
+
+                        <button id="btnAdd" class="btn btn-primary"><i class="fa fa-plus"></i> Add</button>
+                    </div>
+
+                    <div class="clear_fix"></div>
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <table id="item_table" class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Description</th>
+                                <th>Related Voucher No.</th>
+                                <th>Amount</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                            <tr>
+                                <th colspan="3">Grand Total</th>
+                                <th colspan="2" id="total_amount">0</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<th:block th:fragment="script">
+    <script type="text/javascript" th:inline="javascript">
+        $(function () {
+            init_expenses();
+        });
+
+        function init_expenses() {
+            $('#item_table tbody').empty();
+            let date = $('#date').val();
+            $.ajax({
+                method: 'GET',
+                url: "getExpenses",
+                data: {'date': date},
+                success: function (expenses) {
+                    console.log(expenses);
+                    if (expenses !== null & expenses.length > 0) {
+                        for (let expense of expenses) {
+                            add_items(expense.id, expense.description, expense.relatedVoucherNo, expense.amount);
+                        }
+                    }
+                    change_grand_total();
+                }
+            });
+        }
+
+        $('#date').on('change', function () {
+            init_expenses();
+        })
+
+        $("#btnAdd").on("click", function () {
+            save_expense();
+        });
+
+        function save_expense() {
+            let description = $('#desc').val();
+            let relatedVoucherNo = $('#relatedVoucherNo').val();
+            let expenseDate = $('#date').val();
+            let amount = $('#amount').val();
+            let expense = {description, relatedVoucherNo, expenseDate, amount};
+            $.post({
+                url: "saveExpense",
+                contentType: "application/json",
+                data: JSON.stringify(expense),
+                success: function (response) {
+                    if (response.messageType === 'error') {
+                        notify(response);
+                    } else {
+                        add_items(response.messageDesc, description, relatedVoucherNo, amount);
+                        change_grand_total();
+                        clear_data();
+                    }
+                }
+            });
+        }
+
+        function add_items(id, description, relatedVoucherNo, amount) {
+            let markup = "<tr>" +
+                "<td>" + id + "</td>" +
+                "<td>" + description + "</td>" +
+                "<td>" + relatedVoucherNo + "</td>" +
+                "<td>" + amount + "</td>" +
+                "<td><button class='btn btn-xs btn-danger' onclick='remove(this);'>Delete</button></td>" +
+                "</tr>";
+            $("table tbody").append(markup);
+        }
+
+        function clear_data() {
+            $("#desc").val('');
+            $("#relatedVoucherNo").val('');
+            $("#amount").val('');
+        }
+
+        function remove(src) {
+            let row = src.parentNode.parentNode;
+            let id = row.cells[0].innerHTML;
+            console.log("delete expense : " + id);
+            $.post({
+                url: "deleteExpense",
+                contentType: "application/json",
+                data: id,
+                success: function (response) {
+                    notify(response);
+                    if (response.messageType === 'success') {
+                        row.parentNode.removeChild(row);
+                        change_grand_total();
+                    }
+                }
+            });
+
+        }
+
+        function get_items() {
+            let table = $("#item_table");
+            let items = [];
+            table.find('tbody>tr').each(function () {
+                let $tds = $(this).find('td'),
+                    id = $tds.eq(0).text(),
+                    description = $tds.eq(1).text(),
+                    relatedVoucherNo = $tds.eq(2).text(),
+                    amount = $tds.eq(3).text();
+                items.push({id, description, relatedVoucherNo, amount});
+            });
+            return items;
+        }
+
+        function change_grand_total() {
+            let items = get_items();
+            let total_amount = 0;
+            for (let i in items) {
+                let item = items[i];
+                total_amount += parseInt(item.amount);
+            }
+            $('tfoot th#total_amount').text(total_amount);
+        }
+
+        function notify(response) {
+            new PNotify({
+                title: response.messageTitle,
+                text: response.messageDesc,
+                type: response.messageType,
+                styling: 'bootstrap3'
+            });
+        }
+    </script>
+</th:block>
+</html>

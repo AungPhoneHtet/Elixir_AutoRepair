@@ -11,6 +11,7 @@ import com.elixir.workshop.service.VoucherService;
 import com.elixir.workshop.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

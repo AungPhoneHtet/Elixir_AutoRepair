@@ -22,6 +22,8 @@ public interface Constants {
         String STOCK = "stock";
         String EXISTING_STOCKS = "existing_stocks";
 
+        String EXPENSE = "expense";
+
         String NEW_USER = "new_user";
         String EDIT_USER = "edit_user";
         String EXISTING_USERS = "existing_users";
