@@ -13,5 +13,6 @@ public class Expense extends Root implements Serializable {
     private Double amount;
     private String relatedVoucherNo;
     private String expenseDate;
+    private long expenseTypeId;
 
 }

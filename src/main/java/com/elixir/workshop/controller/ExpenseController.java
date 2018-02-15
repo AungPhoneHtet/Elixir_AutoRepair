@@ -6,6 +6,7 @@ import com.elixir.workshop.beans.Expense;
 import com.elixir.workshop.constants.Constants;
 import com.elixir.workshop.exceptions.CoreException;
 import com.elixir.workshop.service.ExpenseService;
+import com.elixir.workshop.service.ExpenseTypeService;
 import com.elixir.workshop.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +25,16 @@ public class ExpenseController extends MainController {
     ExpenseService expenseService;
 
     @Autowired
+    ExpenseTypeService expenseTypeService;
+
+    @Autowired
     Messages messages;
 
     @GetMapping("/expense")
     public String getExpense(Model model, HttpServletRequest request) {
         try {
             model.addAttribute("expenses", expenseService.findByDate(DateUtils.getCurrentDate()));
+            model.addAttribute("expenseTypes", expenseTypeService.findAll());
         } catch (CoreException e) {
             return super.replaceContentPage(model, request, Constants.ContentPages.EXPENSE);
         }

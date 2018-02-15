@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="mm" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Meta, title, CSS, favicons, etc. -->
@@ -146,6 +146,13 @@
             "scrollY": 200,
             "scrollX": true
         })
+
+        $('#locales').on('change', function () {
+            var selectedOption = $('#locales').val();
+            if (selectedOption !== '') {
+                window.location.replace('home?lang=' + selectedOption);
+            }
+        });
 
     })
 </script>

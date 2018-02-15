@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <body>
 <div class="right_col" role="main" th:fragment="content">
     <div class="row">
@@ -22,15 +22,22 @@
                     <div class="col-md-12 col-sm-12 col-xs-12 no-print">
                         <div class="x_title"><h5>Expense(s)</h5></div>
                         <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                            <input class="form-control" id="desc" placeholder="Description">
-                        </div>
-                        <div class="col-md-3 col-sm-12 col-xs-12 form-group">
                             <input class="col-md-3 form-control" id="relatedVoucherNo" placeholder="Voucher No.">
                         </div>
                         <div class="col-md-3 col-sm-12 col-xs-12 form-group">
-                            <input class="form-control" id="amount" placeholder="Amount">
+                            <input class="form-control" id="desc" placeholder="Description">
                         </div>
-
+                        <div class="col-md-3 col-sm-12 col-xs-12 form-group">
+                            <div class="col-md-6 col-sm-12 col-xs-12 form-group">
+                                <select class="form-control" id="expenseType">
+                                    <option th:each="expenseType : ${expenseTypes}" th:value="${expenseType.id}"
+                                            th:text="${expenseType.description}"></option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-xs-12 form-group">
+                                <input class="form-control" id="amount" placeholder="Amount">
+                            </div>
+                        </div>
                         <button id="btnAdd" class="btn btn-primary"><i class="fa fa-plus"></i> Add</button>
                     </div>
 
@@ -39,9 +46,10 @@
                         <table id="item_table" class="table table-bordered">
                             <thead>
                             <tr>
-                                <th>Id</th>
-                                <th>Description</th>
+                                <th style="display: none">Id</th>
                                 <th>Related Voucher No.</th>
+                                <th>Description</th>
+                                <th>Expense Type</th>
                                 <th>Amount</th>
                                 <th>Actions</th>
                             </tr>
@@ -49,8 +57,8 @@
                             <tbody></tbody>
                             <tfoot>
                             <tr>
-                                <th colspan="3">Grand Total</th>
-                                <th colspan="2" id="total_amount">0</th>
+                                <th colspan="4">Grand Total</th>
+                                <th colspan="3" id="total_amount">0</th>
                             </tr>
                             </tfoot>
                         </table>
@@ -65,6 +73,10 @@
     <script type="text/javascript" th:inline="javascript">
         $(function () {
             init_expenses();
+
+            $('#date').on('change', function () {
+                init_expenses();
+            })
         });
 
         function init_expenses() {
@@ -78,17 +90,13 @@
                     console.log(expenses);
                     if (expenses !== null & expenses.length > 0) {
                         for (let expense of expenses) {
-                            add_items(expense.id, expense.description, expense.relatedVoucherNo, expense.amount);
+                            add_items(expense.id, expense.description, expense.relatedVoucherNo, expense.expenseTypeId, expense.amount);
                         }
                     }
                     change_grand_total();
                 }
             });
         }
-
-        $('#date').on('change', function () {
-            init_expenses();
-        })
 
         $("#btnAdd").on("click", function () {
             save_expense();
@@ -99,7 +107,8 @@
             let relatedVoucherNo = $('#relatedVoucherNo').val();
             let expenseDate = $('#date').val();
             let amount = $('#amount').val();
-            let expense = {description, relatedVoucherNo, expenseDate, amount};
+            let expenseTypeId = $('#expenseType').val();
+            let expense = {description, relatedVoucherNo, expenseDate, amount, expenseTypeId};
             $.post({
                 url: "saveExpense",
                 contentType: "application/json",
@@ -108,7 +117,7 @@
                     if (response.messageType === 'error') {
                         notify(response);
                     } else {
-                        add_items(response.messageDesc, description, relatedVoucherNo, amount);
+                        add_items(response.messageDesc, description, relatedVoucherNo, expenseTypeId, amount);
                         change_grand_total();
                         clear_data();
                     }
@@ -116,11 +125,20 @@
             });
         }
 
-        function add_items(id, description, relatedVoucherNo, amount) {
+        function add_items(id, description, relatedVoucherNo, expenseTypeId, amount) {
+            let expenseTypes = [[${expenseTypes}]];
+            let expenseTypeDesc;
+            for (var i = 0; i < expenseTypes.length; i++) {
+                if (expenseTypes[i].id == expenseTypeId) {
+                    expenseTypeDesc = expenseTypes[i].description;
+                    break;
+                }
+            }
             let markup = "<tr>" +
-                "<td>" + id + "</td>" +
-                "<td>" + description + "</td>" +
+                "<td style='display: none'>" + id + "</td>" +
                 "<td>" + relatedVoucherNo + "</td>" +
+                "<td>" + description + "</td>" +
+                "<td>" + expenseTypeDesc + "</td>" +
                 "<td>" + amount + "</td>" +
                 "<td><button class='btn btn-xs btn-danger' onclick='remove(this);'>Delete</button></td>" +
                 "</tr>";
@@ -158,10 +176,11 @@
             table.find('tbody>tr').each(function () {
                 let $tds = $(this).find('td'),
                     id = $tds.eq(0).text(),
-                    description = $tds.eq(1).text(),
-                    relatedVoucherNo = $tds.eq(2).text(),
-                    amount = $tds.eq(3).text();
-                items.push({id, description, relatedVoucherNo, amount});
+                    relatedVoucherNo = $tds.eq(1).text(),
+                    description = $tds.eq(2).text(),
+                    expenseType = $tds.eq(3).text(),
+                    amount = $tds.eq(4).text();
+                items.push({id, description, relatedVoucherNo, expenseType, amount});
             });
             return items;
         }
