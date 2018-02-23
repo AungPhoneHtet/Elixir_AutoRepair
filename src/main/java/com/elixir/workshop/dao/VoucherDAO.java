@@ -2,6 +2,7 @@ package com.elixir.workshop.dao;
 
 import com.elixir.workshop.beans.Voucher;
 
+import java.util.Date;
 import java.util.List;
 
 public interface VoucherDAO {
@@ -19,4 +20,6 @@ public interface VoucherDAO {
     Voucher findByVoucherNo(String voucherNo);
 
     String getVoucherSerialNo();
+
+    List<Voucher> findByDate(Date date);
 }

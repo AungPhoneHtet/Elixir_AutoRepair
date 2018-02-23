@@ -3,10 +3,12 @@ package com.elixir.workshop.controller;
 
 import com.elixir.workshop.Messages;
 import com.elixir.workshop.beans.BaseResponse;
+import com.elixir.workshop.beans.Expense;
 import com.elixir.workshop.beans.Voucher;
 import com.elixir.workshop.constants.Constants;
 import com.elixir.workshop.exceptions.CoreException;
 import com.elixir.workshop.service.VoucherService;
+import com.elixir.workshop.utils.DateUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class VoucherController extends MainController {
@@ -103,6 +106,16 @@ public class VoucherController extends MainController {
                         .messageTitle(BaseResponse.MESSAGE_TITLE_SUCCESS)
                         .messageDesc(messages.get("paid.success"))
                         .build());
+    }
+
+    @GetMapping(value = "/getVouchers", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<List<Voucher>> getVouchers(@RequestParam String date) {
+        try {
+            return ResponseEntity.ok().body(voucherService.findByDate(DateUtils.changeUIDateToSQLDate(date)));
+        } catch (CoreException e) {
+            return ResponseEntity.ok().body(null);
+        }
     }
 
 }

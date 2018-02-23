@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -82,5 +83,10 @@ public class VoucherServiceImpl implements VoucherService {
         Voucher voucher = voucherDAO.findByVoucherNo(voucherNo);
         voucher.setItems(itemDAO.findByVoucherNo(voucherNo));
         return voucher;
+    }
+
+    @Override
+    public List<Voucher> findByDate(Date date) throws CoreException {
+        return voucherDAO.findByDate(date);
     }
 }

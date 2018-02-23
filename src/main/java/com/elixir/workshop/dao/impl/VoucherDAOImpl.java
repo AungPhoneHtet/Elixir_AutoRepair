@@ -103,6 +103,12 @@ public class VoucherDAOImpl implements VoucherDAO {
         return jdbcTemplate.queryForObject(sql, String.class);
     }
 
+    @Override
+    public List<Voucher> findByDate(java.util.Date date) {
+        final String sql = "SELECT * FROM voucher WHERE date = ?";
+        return jdbcTemplate.query(sql, new Object[]{date}, new VoucherRowMapper());
+    }
+
     class VoucherRowMapper implements RowMapper<Voucher> {
 
         @Override
@@ -122,4 +128,6 @@ public class VoucherDAOImpl implements VoucherDAO {
             return v;
         }
     }
+
+
 }
