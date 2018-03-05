@@ -2,11 +2,14 @@ package com.elixir.workshop.service.impl;
 
 
 import com.elixir.workshop.Messages;
+import com.elixir.workshop.beans.Item;
+import com.elixir.workshop.beans.Transaction;
 import com.elixir.workshop.beans.Voucher;
 import com.elixir.workshop.constants.Constants;
 import com.elixir.workshop.dao.ItemDAO;
 import com.elixir.workshop.dao.VoucherDAO;
 import com.elixir.workshop.exceptions.CoreException;
+import com.elixir.workshop.service.TransactionService;
 import com.elixir.workshop.service.VoucherService;
 import com.elixir.workshop.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +27,14 @@ public class VoucherServiceImpl implements VoucherService {
     private VoucherDAO voucherDAO;
     private ItemDAO itemDAO;
     private Messages messages;
+    private TransactionService transactionService;
 
     @Autowired
-    public VoucherServiceImpl(VoucherDAO voucherDAO, ItemDAO itemDAO, Messages messages) {
+    public VoucherServiceImpl(VoucherDAO voucherDAO, ItemDAO itemDAO, Messages messages, TransactionService transactionService) {
         this.voucherDAO = voucherDAO;
         this.itemDAO = itemDAO;
         this.messages = messages;
+        this.transactionService = transactionService;
     }
 
     @Override
@@ -58,8 +63,18 @@ public class VoucherServiceImpl implements VoucherService {
 
     @Override
     public void paidVoucher(String voucherNo) throws CoreException {
-        validateBeforePaid(this.findByVoucherNo(voucherNo));
+        Voucher voucher = this.findByVoucherNo(voucherNo);
+        validateBeforePaid(voucher);
         voucherDAO.updateStatus(voucherNo, Constants.Status.PAID);
+        Transaction transaction = prepareTransaction(voucher);
+        transactionService.save(transaction);
+    }
+
+    private Transaction prepareTransaction(Voucher voucher) {
+        Transaction transaction = new Transaction();
+        transaction.setTransDesc(Constants.Transaction.VOUCHER_TRANS_DESC + voucher.getVoucherNo());
+        transaction.setAmount(voucher.getItems().stream().mapToDouble(Item::getAmount).sum());
+        return transaction;
     }
 
     private void validateBeforePaid(Voucher voucher) throws CoreException {

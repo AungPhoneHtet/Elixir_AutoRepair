@@ -15,4 +15,6 @@ public interface ExpenseDAO {
 
     Expense findById(long id);
 
+    void updateStatus(long id, String status);
+
 }

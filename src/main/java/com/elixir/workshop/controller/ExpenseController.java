@@ -83,6 +83,27 @@ public class ExpenseController extends MainController {
                         .build());
     }
 
+    @PostMapping("/paidExpense")
+    @ResponseBody
+    public ResponseEntity<BaseResponse> paidExpense(@RequestBody long id) {
+        try {
+            expenseService.paid(id);
+        } catch (CoreException e) {
+            return ResponseEntity.ok().body(
+                    BaseResponse.builder()
+                            .messageType(BaseResponse.MESSAGE_TYPE_ERROR)
+                            .messageTitle(BaseResponse.MESSAGE_TITLE_FAIL)
+                            .messageDesc(e.getMessage())
+                            .build());
+        }
+        return ResponseEntity.ok().body(
+                BaseResponse.builder()
+                        .messageType(BaseResponse.MESSAGE_TYPE_SUCCESS)
+                        .messageTitle(BaseResponse.MESSAGE_TITLE_SUCCESS)
+                        .messageDesc(messages.get("paid.success"))
+                        .build());
+    }
+
     @GetMapping(value = "/getExpenses", produces = "application/json")
     @ResponseBody
     public ResponseEntity<List<Expense>> getExpenses(@RequestParam String date) {

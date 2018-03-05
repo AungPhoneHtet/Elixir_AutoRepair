@@ -46,4 +46,9 @@ public interface Constants {
         String SAVE = "save";
         String PAID = "paid";
     }
+
+    interface Transaction {
+        String VOUCHER_TRANS_DESC = "Voucher Trans For : ";
+        String EXPENSE_TRANS_DESC = "Expense Trans For : ";
+    }
 }

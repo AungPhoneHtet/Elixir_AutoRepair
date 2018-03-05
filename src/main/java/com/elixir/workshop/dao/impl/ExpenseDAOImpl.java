@@ -25,8 +25,8 @@ public class ExpenseDAOImpl implements ExpenseDAO {
 
     @Override
     public Expense save(Expense expense) {
-        final String sql = "INSERT INTO expense(description, amount, related_voucher_no, expense_date, expense_type_id, created_by," +
-                " created_date, updated_by, updated_date) VALUES(?,?,?,?,?,?,?,?,?)";
+        final String sql = "INSERT INTO expense(description, amount, related_voucher_no, expense_date, expense_type_id,status, created_by," +
+                " created_date, updated_by, updated_date) VALUES(?,?,?,?,?,?,?,?,?,?)";
         KeyHolder holder = new GeneratedKeyHolder();
         DBUtils.initRootData(expense);
         jdbcTemplate.update(new PreparedStatementCreator() {
@@ -39,6 +39,7 @@ public class ExpenseDAOImpl implements ExpenseDAO {
                 ps.setString(++i, expense.getRelatedVoucherNo());
                 ps.setDate(++i, DateUtils.changeUIDateToSQLDate(expense.getExpenseDate()));
                 ps.setLong(++i, expense.getExpenseTypeId());
+                ps.setString(++i, expense.getStatus());
                 ps.setString(++i, expense.getCreatedBy());
                 ps.setTimestamp(++i, new Timestamp(expense.getCreatedDate().getTime()));
                 ps.setString(++i, expense.getUpdatedBy());
@@ -70,6 +71,12 @@ public class ExpenseDAOImpl implements ExpenseDAO {
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, new ExpenseRowMapper());
     }
 
+    @Override
+    public void updateStatus(long id, String status) {
+        final String sql = "UPDATE expense SET Status = ? WHERE id = ?";
+        jdbcTemplate.update(sql, status, id);
+    }
+
     class ExpenseRowMapper implements RowMapper<Expense> {
 
         @Override
@@ -80,6 +87,7 @@ public class ExpenseDAOImpl implements ExpenseDAO {
             expense.setRelatedVoucherNo(rs.getString("related_voucher_no"));
             expense.setExpenseDate(DateUtils.changeSQLDateToUIDate(rs.getDate("expense_date")));
             expense.setExpenseTypeId(rs.getLong("expense_type_id"));
+            expense.setStatus(rs.getString("status"));
 
             expense.setId(rs.getLong("id"));
             expense.setCreatedBy(rs.getString("created_by"));

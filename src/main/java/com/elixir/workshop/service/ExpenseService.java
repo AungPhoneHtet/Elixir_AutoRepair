@@ -10,6 +10,8 @@ public interface ExpenseService {
 
     Expense save(Expense expense) throws CoreException;
 
+    void paid(long id) throws CoreException;
+
     void delete(long id) throws CoreException;
 
     List<Expense> findByDate(Date date) throws CoreException;

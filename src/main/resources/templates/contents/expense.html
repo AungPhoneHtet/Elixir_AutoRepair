@@ -150,7 +150,7 @@
                     console.log(expenses);
                     if (expenses !== null & expenses.length > 0) {
                         for (let expense of expenses) {
-                            add_items(expense.id, expense.description, expense.relatedVoucherNo, expense.expenseTypeId, expense.amount);
+                            add_items(expense.id, expense.description, expense.relatedVoucherNo, expense.expenseTypeId, expense.amount, expense.status);
                         }
                     }
                     change_grand_total();
@@ -177,7 +177,7 @@
                     if (response.messageType === 'error') {
                         notify(response);
                     } else {
-                        add_items(response.messageDesc, description, relatedVoucherNo, expenseTypeId, amount);
+                        add_items(response.messageDesc, description, relatedVoucherNo, expenseTypeId, amount, 'save');
                         change_grand_total();
                         clear_data();
                     }
@@ -185,7 +185,7 @@
             });
         }
 
-        function add_items(id, description, relatedVoucherNo, expenseTypeId, amount) {
+        function add_items(id, description, relatedVoucherNo, expenseTypeId, amount, status) {
             let expenseTypes = [[${expenseTypes}]];
             let expenseTypeDesc;
             for (var i = 0; i < expenseTypes.length; i++) {
@@ -194,13 +194,21 @@
                     break;
                 }
             }
+            let action_section;
+            if (status === 'save')
+                action_section = "<td><button class='btn btn-xs btn-success' onclick='paid(this);'>Paid</button>" +
+                    "<button class='btn btn-xs btn-danger' onclick='remove(this);'>Delete</button>" +
+                    "</td>";
+            else
+                action_section = "<td><button class='btn btn-xs btn-primary'>Already Paid</button></td>";
+
             let markup = "<tr>" +
                 "<td style='display: none'>" + id + "</td>" +
                 "<td>" + relatedVoucherNo + "</td>" +
                 "<td>" + description + "</td>" +
                 "<td>" + expenseTypeDesc + "</td>" +
                 "<td>" + amount + "</td>" +
-                "<td><button class='btn btn-xs btn-danger' onclick='remove(this);'>Delete</button></td>" +
+                action_section +
                 "</tr>";
             $("#item_table tbody").append(markup);
         }
@@ -238,6 +246,24 @@
                     if (response.messageType === 'success') {
                         row.parentNode.removeChild(row);
                         change_grand_total();
+                    }
+                }
+            });
+
+        }
+
+        function paid(src) {
+            let row = src.parentNode.parentNode;
+            let id = row.cells[0].innerHTML;
+            console.log("paid expense : " + id);
+            $.post({
+                url: "paidExpense",
+                contentType: "application/json",
+                data: id,
+                success: function (response) {
+                    notify(response);
+                    if (response.messageType === 'success') {
+                        init_expenses();
                     }
                 }
             });
