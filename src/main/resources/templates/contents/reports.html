@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="right_col" role="main" th:fragment="content">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_title">
+                <h4>Reports</h4>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_panel">
+                <div class="x_content">
+                    <form id="cct-report-form" data-parsley-validate
+                          class="form-horizontal form-label-left"
+                          th:action="@{/generateReport}" method="post">
+                        <div class="form-group">
+                            <label class="control-label col-md-4 col-sm-4 col-xs-12">Report
+                                Name<span class="required red">*</span>
+                            </label>
+                            <div class="col-md-4 col-sm-6 col-xs-12">
+                                <select class="form-control col-md-10 col-sm-9 col-xs-12"
+                                        th:field="${report.reportName}">
+                                    <option th:value="#{voucher.summary.report}">Voucher Summary Report</option>
+                                    <option th:value="#{expense.report}">Expense Report</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 col-sm-4 col-xs-12">Reporting
+                                Period<span class="required red">*</span>
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="col-md-4">
+                                    <input th:field="${report.fromPeriod}"
+                                           class="form-control has-feedback-left single_cal2"
+                                           readonly>
+                                    <span class="fa fa-calendar-o form-control-feedback left"
+                                          aria-hidden="true"></span>
+                                </div>
+                                <div class="col-md-4">
+                                    <input th:field="${report.toPeriod}"
+                                           class="form-control has-feedback-left single_cal2"
+                                           readonly>
+                                    <span class="fa fa-calendar-o form-control-feedback left"
+                                          aria-hidden="true"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 col-sm-4 col-xs-12">
+                                Status<span class="required red">*</span>
+                            </label>
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <select class="form-control col-md-10 col-sm-9 col-xs-12"
+                                        th:field="${report.status}">
+                                    <option value="all">All</option>
+                                    <option value="save">Save</option>
+                                    <option value="paid">Paid</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-4 col-sm-4 col-xs-12">File Format
+                                <span class="required red">*</span></label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <p></p>
+                                <input th:field="${report.outputType}" type="radio"
+                                       class="flat" name="outputType" id='rdoPDF' value="PDF" required/> PDF
+                                <div class="clearFix">
+                                    <br>
+                                </div>
+                                <input th:field="${report.outputType}" type="radio"
+                                       class="flat" name="outputType" value="XLS" required/> XLS
+                                <div class="clearFix">
+                                    <br>
+                                </div>
+                                <input th:field="${report.outputType}" type="radio"
+                                       class="flat" name="outputType" value="CSV" required/> CSV
+                            </div>
+                        </div>
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-4">
+                                <button class="btn btn-primary" type="reset">Cancel</button>
+                                <button type="submit" class="btn btn-success">Generate
+                                    Report
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<th:block th:fragment="script">
+    <script type="text/javascript" th:inline="javascript">
+        $(function () {
+            init_default_radio();
+        });
+
+        function init_default_radio() {
+            $('input:radio[class=flat][id=rdoPDF]').prop('checked', true);
+        }
+
+    </script>
+</th:block>
+</html>

@@ -17,4 +17,5 @@ public interface ExpenseService {
     List<Expense> findByDate(Date date) throws CoreException;
 
     Expense findById(long id) throws CoreException;
+
 }

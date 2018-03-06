@@ -31,4 +31,5 @@ public class DateUtils extends org.apache.commons.lang.time.DateUtils {
     public static Date getCurrentDate() {
         return new Date(new java.util.Date().getTime());
     }
+
 }

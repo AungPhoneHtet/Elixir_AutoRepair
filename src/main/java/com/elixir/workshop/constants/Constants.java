@@ -27,6 +27,8 @@ public interface Constants {
         String NEW_USER = "new_user";
         String EDIT_USER = "edit_user";
         String EXISTING_USERS = "existing_users";
+
+        String REPORTS = "reports";
     }
 
     interface URL {
@@ -50,5 +52,11 @@ public interface Constants {
     interface Transaction {
         String VOUCHER_TRANS_DESC = "Voucher Trans For : ";
         String EXPENSE_TRANS_DESC = "Expense Trans For : ";
+    }
+
+    interface ReportOutputType {
+        String CSV = "CSV";
+        String PDF = "PDF";
+        String XLS = "XLS";
     }
 }

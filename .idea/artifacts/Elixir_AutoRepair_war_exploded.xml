@@ -99,6 +99,12 @@
           <element id="library" level="project" name="Maven: jakarta-regexp:jakarta-regexp:1.4" />
           <element id="library" level="project" name="Maven: org.olap4j:olap4j:0.9.7.309-JS-3" />
           <element id="library" level="project" name="Maven: com.google.zxing:core:2.3.0" />
+          <element id="library" level="project" name="Maven: org.apache.poi:poi-ooxml:3.11" />
+          <element id="library" level="project" name="Maven: org.apache.poi:poi:3.11" />
+          <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.10" />
+          <element id="library" level="project" name="Maven: org.apache.poi:poi-ooxml-schemas:3.11" />
+          <element id="library" level="project" name="Maven: org.apache.xmlbeans:xmlbeans:2.6.0" />
+          <element id="library" level="project" name="Maven: org.jetbrains:annotations:15.0" />
         </element>
       </element>
       <element id="directory" name="META-INF">
